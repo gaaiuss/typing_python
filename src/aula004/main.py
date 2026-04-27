@@ -1,9 +1,12 @@
+# Singleton Project pattern (variation via cache)
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from resource.utils import cyan_print, sep_print
 from typing import ClassVar, Self, final, override
 
 
+# Blueprint class
 class BaseAddress(ABC):
     def __init__(self, street: str, number: int) -> None:
         self.street = street
@@ -27,10 +30,15 @@ class Address(BaseAddress):
         return f"{self.street}, {self.number}"
 
 
-@final
+@final  # last one in hierarchy (prohibits class inheritance)
 class CachedAddress(Address):
+    # ClassVar: when you need an atrribute to be linked with the blueptrint
+    # or class itself, not the objects that will be created after using the bp.
+    # This allows the typechecker and the devs to know that instances of this
+    # class cannot override this variable.
     _cache: ClassVar[dict[str, Self]] = {}
 
+    # returns the object itself (before creation)
     def __new__(cls, street: str, number: int) -> Self:
         fake_id = f"{street}{number}".lower().replace(" ", "")
 
@@ -55,11 +63,13 @@ class CachedAddress(Address):
 type Addresses = dict[int, Address]
 
 
+# a dataclass is a shortcut for writing classes whose main purpose is to store
+# data, with less code and cleaner syntax.
 @dataclass
 class Person:
     name: str
     age: int
-    _addresses: Addresses = field(
+    _addresses: Addresses = field(  # Addresses -> type alias from line 57
         default_factory=dict[int, Address], init=False, repr=False
     )
     _new_address_index = 0

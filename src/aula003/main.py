@@ -19,7 +19,7 @@ class Cat(Animal):
 
 
 def get_animal_name(animal: Animal) -> None:
-    cyan_print(f"'get_animal_name' | Classe: {type(animal).__name__}")
+    cyan_print(f"'get_animal_name' | Class: {type(animal).__name__}")
     cyan_print(f"'get_animal_name' | {animal.name = !r}")
     sep_print()
 

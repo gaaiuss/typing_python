@@ -18,6 +18,12 @@ class Cat(Animal):
         sep_print()
 
 
+class Tiger(Cat):
+    def talk(self) -> None:
+        cyan_print(f"{self.name!r} says 'miau!'")
+        sep_print()
+
+
 def get_animal_name(animal: Animal) -> None:
     cyan_print(f"'get_animal_name' | Class: {type(animal).__name__}")
     cyan_print(f"'get_animal_name' | {animal.name = !r}")

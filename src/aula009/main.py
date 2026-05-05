@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     my_dict = MyMutableDict(data=data1)
     my_dict2 = MyMutableDict(data=data2)
-    my_dict3 = MyMutableDict(data=data3)
+    # my_dict3 = MyMutableDict(data=data3)
 
     sep_print()
 
@@ -78,9 +78,9 @@ if __name__ == "__main__":
     cyan_print(my_dict2)
     cyan_print(my_dict2.inv())
     cyan_print(my_dict2.inv_strict())
-    cyan_print()
-    cyan_print(my_dict3)
-    cyan_print(my_dict3.inv())
-    cyan_print(my_dict3.inv_strict())
+    # cyan_print()
+    # cyan_print(my_dict3)
+    # cyan_print(my_dict3.inv())
+    # cyan_print(my_dict3.inv_strict())
 
     sep_print()

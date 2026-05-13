@@ -36,6 +36,9 @@
 # [D]ependency Inversion Principle (DIP): depend on only abstraction, not
 #   implementation.
 
+from collections.abc import Callable
+from pathlib import Path
+from resource.utils import cyan_print, sep_print
 from typing import Protocol
 
 
@@ -48,3 +51,35 @@ class SupportsWrite[In](Protocol):
 
 
 class SupportsReadWrite[In, Out](SupportsRead[Out], SupportsWrite[In], Protocol): ...
+
+
+class FileDataManager[Out]:
+    def __init__(self, path: Path, parser: Callable[[str], Out]) -> None:
+        self.path = path
+        self.parser = parser
+
+    def read(self) -> Out:
+        with self.path.open("r", encoding="utf-8") as file:
+            data = file.read()
+
+            return self.parser(data)
+
+    def write(self, data: str) -> None:
+        with self.path.open("w", encoding="utf-8") as file:
+            file.write(data)
+
+
+def manage_file[Out](file_manager: SupportsReadWrite[str, Out], data: str) -> Out:
+    file_manager.write(data)
+    return file_manager.read()
+
+
+if __name__ == "__main__":
+    sep_print()
+
+    # Simple parser for int
+    file_manager = FileDataManager(Path("./lesson11_a.txt"), int)
+    data = manage_file(file_manager, "123")
+    cyan_print(data, type(data))
+
+    sep_print()

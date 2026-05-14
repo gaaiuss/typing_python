@@ -1,3 +1,6 @@
+# Project Specific
+*.txt
+
 .DS_Store
 db.json
 

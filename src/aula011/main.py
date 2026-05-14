@@ -36,6 +36,7 @@
 # [D]ependency Inversion Principle (DIP): depend on only abstraction, not
 #   implementation.
 
+import json
 from collections.abc import Callable
 from pathlib import Path
 from resource.utils import cyan_print, sep_print
@@ -53,7 +54,7 @@ class SupportsWrite[In](Protocol):
 class SupportsReadWrite[In, Out](SupportsRead[Out], SupportsWrite[In], Protocol): ...
 
 
-class FileDataManager[Out]:
+class FileDataManager[Out](SupportsReadWrite[str, Out]):
     def __init__(self, path: Path, parser: Callable[[str], Out]) -> None:
         self.path = path
         self.parser = parser
@@ -78,8 +79,27 @@ if __name__ == "__main__":
     sep_print()
 
     # Simple parser for int
-    file_manager = FileDataManager(Path("./lesson11_a.txt"), int)
+    file_manager = FileDataManager(Path(".\\lesson11_a.txt"), int)
     data = manage_file(file_manager, "123")
     cyan_print(data, type(data))
+    sep_print()
 
+    # Parser JSON to list[int]
+    file_manager = FileDataManager[list[int]](Path(".\\lesson11_b.txt"), json.loads)
+    data = manage_file(
+        file_manager,
+        "[1,2,3,4]",  # JSON String NOT Python Literal
+    )
+    cyan_print(data, type(data))
+    sep_print()
+
+    # Parser JSON to dict[str, int]
+    file_manager = FileDataManager[dict[str, int]](
+        Path(".\\lesson11_c.txt"), json.loads
+    )
+    data = manage_file(
+        file_manager,
+        '{"a": 1, "b": 2}',
+    )
+    cyan_print(data, type(data))
     sep_print()

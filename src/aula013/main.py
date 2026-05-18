@@ -1,4 +1,4 @@
-# Callbakc Protocol vc Callable
+# Callback Protocol vs Callable
 from collections.abc import Callable
 from resource.utils import cyan_print, sep_print
 from typing import Protocol

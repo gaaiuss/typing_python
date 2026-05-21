@@ -13,7 +13,7 @@
 
 # https://youtu.be/-nSOKE4f2gA?si=Ds1TBFhcU0iYS0U0
 
-# Doc Python
+# Python Doc
 # https://typing.python.org/en/latest/spec/protocol.html#protocols
 from abc import abstractmethod
 from resource.utils import cyan_print, sep_print
@@ -21,7 +21,7 @@ from typing import Protocol, final
 
 
 class TemplateMethod[A, B](Protocol):
-    @abstractmethod  # isso vai gerar erro em runtime
+    @abstractmethod  # this is going to generate runtime error
     def step_a(self) -> A: ...
     @abstractmethod
     def step_b(self) -> B: ...

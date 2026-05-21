@@ -3,72 +3,73 @@ from collections.abc import Callable
 from resource.utils import cyan_print, sep_print
 from typing import Protocol
 
-# Me diz uma coisa, o que significa isso aqui?
+# Tell me what is it?
 type ReallyRelaxedCallable = Callable[..., None]  # (*args, **kwargs) -> None
 
-# E isso?
+# And this?
 type MysticCallable = Callable[[int, int, str], bool]  # (1, 2, 'a') -> true
 
-# Podemos afirmar o seguinte:
-# `ReallyRelaxedCallable` recebe qualquer coisa e retorna `None` [PONTO].
-# `MysticCallable` recebe `int`, `int` e `str` e retorna `bool` [PONTO].
+# We can assume that:
+# `ReallyRelaxedCallable` receives anything and returns `None`.
+# `MysticCallable` receives `int`, `int` e `str` e returns `bool`.
 
 ################################################################################
 #
-# Não há nada de errado em usar `Callable`, de fato, vamos usar muito mais eles
-# do que os `Protocols`.
-# Porém, em algum momento o nome dos argumentos vão importar. Talvez você crie
-# uma função que só possa receber argumentos nomeados ou que possa ter uma
-# assinatura muito complexa.
-# Nesses casos os callback protocols resolvem o problema.
-# Com eles é possível definir um contrato através de um protocol e depois fazer
-# o que quiser com o método `__call__`.
+# There is nothing wrong using `Callable`, in fact, we are going to use them
+# Much more than `Protocols`.
+# Although, at some point, the name of the arguments will matter. Maybe you
+# will create a function that only can recive named arguments or that can have
+# a very complex signature.
+# In these cases, callback protocols resolve the problem.
+# With them it is possible to define a contract through a protocol and after
+# do whatever you want with the `__call__` method.
 #
 ################################################################################
 
 
-# O callback protocol (é muito fácil de implementar)
+# Callback protocol is very easy to implement.
 
 
 class CallbackProtocol(Protocol):
-    # Basta que você defina a assinatura da sua função no método `__call__`.
-    # Por favor, nunca esqueça do `self`.
+    # You just need to define the signature of your function in the `__call__`
+    # method.
+    # Please, never forget the `self`.
     def __call__(self, *, whatever: str) -> str: ...
 
 
 ################################################################################
 
-# Funções para testar: uma tem a assinatura correta, a outra não.
+# Functions to test: one have the right signature, the other do not.
 
 
 def good_func(*, whatever: str) -> str:
-    """Essa função cumpre o contrato ✅"""
+    """This function fulfills the contract ✅"""
     return whatever
 
 
 def bad_func(not_good: str) -> str:
-    """Essa NÃO função cumpre o contrato ❌"""
+    """This function DO NOT fulfills the contract ❌"""
     return not_good
 
 
 ################################################################################
 
-# Bora testar tudo
+# Let us test all together
 
 if __name__ == "__main__":
     sep_print()
 
-    # 🧐 Isso aqui é só para obcecado por tipos. Não necessário.
-    # Geralmente, vamos usar callback protocol com... advinha? [callbacks]
-    # Mas, vai servir para nosso primeiro exemplo sem complicar as coisas
+    # 🧐 This is for the obssessed for types. It is not necessary.
+    # Generally, we are going to use callback protocol with... guess? [callbacks]
+    # But, this will serve to our first example without complexing things.
     good: CallbackProtocol = good_func
     bad: CallbackProtocol = bad_func
 
-    # Vamos usar as funções
-    same_str_good = good(whatever="Aqui está sua string de volta")
-    same_str_bad = bad(not_good="Aqui está sua string de volta")
+    # Let us use functions
+    same_str_good = good(whatever="Here is your string back")
+    same_str_bad = bad(not_good="Here is your string back")
 
-    # O Python meio que NÃO TÁ NEM AÍ (como sempre)
+    # Python does not care (as always)
     cyan_print(f"{same_str_good}")  # Python ✅
     cyan_print(f"{same_str_bad}")  # Python ✅
 

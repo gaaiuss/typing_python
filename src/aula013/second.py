@@ -1,33 +1,33 @@
+# Typevar with callback protocol
+
 import re
 from resource.utils import cyan_print, sep_print
 from typing import Protocol
 
 ################################################################################
 #
-# TypeVar com callback protocol
-#
-# Também é possível usar `TypeVar` com protocols. Isso permite que você faça a
-# assinatura da sua função de forma mais dinâmica. Assim, os tipos podem variar
-# de acordo com o contexto.
-# No exemplo abaixo, tenho um Protocol super simples. A intenção é receber sempre
-# um atributo nomeado chamado `value` com tipo `T` e retornar `R`.
-# Ambos `T` e `R` são `TypeVars` ou Type Parameters dinâmicos.
-#
+# It is possible as well to use `Typevar` with protocols. This allow you to do
+# signature in your function in a more dynamic way. So, the types can variate
+# accordingly with the context.
+# In the example bellow, we have a very simple Protocol. The intention is to
+# receive a named attribute called `value` with a type `T` and return `R`.
+# Both `T` and `R` are `Typevars` or dynamic Type Parameters.
 ################################################################################
 
-# Essa expressão regular será usada para limpar vírgulas.
-# Ela seleciona o seguinte:
-# - `\s*` - zero ou mais espaços
-# - `,` - a vírgula
-# - `\s*` - zero ou mais espaços
-# Tenho curso grátis sobre isso aqui:
+# This regular expression will be used to clean commas.
+# It selects the following:
+# - `\s*` - zero or more spaces
+# - `,` - comma
+# - `\s*` - zero or more spaces
+# Free regex course:
 # https://www.youtube.com/playlist?list=PLbIBj8vQhvm1VnTa2Np5vDzCxVtyaYLMr
 RE_COMMA_SPACE = re.compile(r"\s*,\s*")
 
 
 ################################################################################
 
-# Vamos definir o nosso `Protocol` que aceita tipos parametrizados (`TypeVar`).
+# We are going to define the `Protocol` that accepts all the parameterizied types
+# (`TypeVar`)
 
 
 class TypeCaster[T, R](Protocol):
@@ -36,57 +36,57 @@ class TypeCaster[T, R](Protocol):
 
 ################################################################################
 
-# Agora podemos definir nossas funções que cumprem o contrato.
+# Now we can define our functions that fulfill the contract
 
 
 def to_str(*, value: object) -> str:
-    """Recebe qualquer coisa e converte em string"""
+    """Receives anything and converts to string"""
 
     return str(value)
 
 
 def str_to_list(*, value: str) -> list[str]:
-    """Recebe uma string e tenta converter em lista"""
+    """Receives a string and tries to convert into list"""
 
     clean_value = RE_COMMA_SPACE.sub(value, ",")
     return [v.strip() for v in RE_COMMA_SPACE.split(clean_value) if v.strip()]
 
 
 def wrong_kw_name(text: str) -> str:
-    """❌ Esse argumento nomeado está com nome errado"""
+    """❌ This named argument is wrong named"""
 
     return text
 
 
 ################################################################################
 
-# Por fim vamos definir algo que "usa" o nosso `Protocol` e testamos se nossas
-# funções passam na tipagem. Perceba que aqui estamos realmente usando as nossas
-# funções como callback (fazendo o nome callback protocol valer).
+# Finally, we are going to define something that "uses" our `Protocol` and test
+# if our functions pass in the typing. Note that here we are really using our
+# functions as callbacks (making the name callback protocol worth).
 
 
 def run_type_caster[T, R](value: T, type_caster: TypeCaster[T, R]) -> R:
-    """Recebe um valor, um type_caster e executa tudo"""
+    """Receives a value, a type caster and executes everything"""
 
     return type_caster(value=value)
 
 
 ################################################################################
 
-# Bora testar tudo
+# Let us test everything
 
 if __name__ == "__main__":
     value_to_str = run_type_caster([1, 2, 3], to_str)
     value_to_list = run_type_caster(
-        ",,,,abc,,,def,Luiz Otávio, a, b,c ,,,",
+        ",,,,abc,,,def,Caio Guilherme, a, b,c ,,,",
         str_to_list,
     )
 
-    # Isso não só gera erro na tipagem, mas também no runtime
+    # This does not only typing error but also in runtime
     # wrong_callback = run_type_caster("", wrong_kw_name)  # ❌
 
-    # Aqui eu estou tentando enviar um `int` para um callback que espera `str`
-    # Também gera erro tanto na tipagem quanto no runtime
+    # Here I am trying to send a `int` to a callback that waits for a `str`
+    # Also generates both typing and runtime error
     # wrong_argument = run_type_caster(123, str_to_list)  # ❌
 
     sep_print()

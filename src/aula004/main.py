@@ -32,7 +32,7 @@ class Address(BaseAddress):
 
 @final  # last one in hierarchy (prohibits class inheritance)
 class CachedAddress(Address):
-    # ClassVar: when you need an atrribute to be linked with the blueptrint
+    # ClassVar: when you need an atrribute to be linked with the blueprint
     # or class itself, not the objects that will be created after using the bp.
     # This allows the typechecker and the devs to know that instances of this
     # class cannot override this variable.

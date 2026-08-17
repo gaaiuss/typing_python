@@ -18,3 +18,5 @@ def sep_print() -> None:
 
 
 cyan_print = make_print(style="cyan")
+green_print = make_print(style="green")
+red_print = make_print(style="red")

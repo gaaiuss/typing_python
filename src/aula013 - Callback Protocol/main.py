@@ -1,9 +1,10 @@
+# type:ignore
 # Callback Protocol vs Callable
 from collections.abc import Callable
 from resource.utils import cyan_print, sep_print
 from typing import Protocol
 
-# Tell me what is it?
+# Tell me what is this?
 type ReallyRelaxedCallable = Callable[..., None]  # (*args, **kwargs) -> None
 
 # And this?

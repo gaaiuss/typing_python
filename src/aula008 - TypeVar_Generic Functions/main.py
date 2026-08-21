@@ -2,7 +2,7 @@
 
 # Type var is a type parameter that acts as a unknown symbol to act as a yet
 # unknown type. Its value will be replaced by a concrete type during the static
-# verificaqtion or the type inference
+# verification or the type inference
 
 
 from collections.abc import Hashable, Iterable, MutableMapping, Sequence
